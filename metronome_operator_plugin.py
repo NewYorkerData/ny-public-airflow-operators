@@ -74,8 +74,8 @@ class MetronomeOperator(BaseOperator):
         super(MetronomeOperator, self).__init__(*args, **kwargs)
 
         self.metronome_job_json = metronome_job_json
-        self._metronome_job_id = None
         # Extract the job ID from the job's definition
+        self._metronome_job_id = json.loads(metronome_job_json)['id']
 
         self.dcos_http_conn_id = dcos_http_conn_id
         self.dcos_robot_user_name = dcos_robot_user_name
@@ -87,7 +87,6 @@ class MetronomeOperator(BaseOperator):
         self._job_state = MetronomeJobState.UNDEFINED
 
     def execute(self, context):
-        self._metronome_job_id = json.loads(self.metronome_job_json)['id']
         self.log.info("Executing Metronome operator")
         self.log.info(f"Metronome job ID: {self._metronome_job_id}")
         self.log.info(f"Metronome job definition: {self.metronome_job_json}")
@@ -285,7 +284,7 @@ class MetronomeOperator(BaseOperator):
             response_starting = http.run(endpoint=f"{self.dcos_metronome_jobs_api_endpoint}/{self._metronome_job_id}/"
                                                   f"runs/{job_run_id}",
                                          headers={"Content-Type": "application/json",
-                                                  "Authorization": f"token={auth_token}"})
+                                         "Authorization": f"token={auth_token}"})
             self.log.debug(f"Response when job is starting is: {str(response_starting)}")
             self.log.info(response_starting.text)
 
