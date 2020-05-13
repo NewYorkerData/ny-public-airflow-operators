@@ -25,8 +25,7 @@ MetronomeOperator(
         dcos_robot_user_pwd=Variable.get("robot_user_pwd_dcos"),
         dag=dag,
         pool="markdown_metronome_job_pool",
-        retries=3
-    )
+        retries=3)
 ```
 
 # HDFS Sensor (Python 3 compatible)
